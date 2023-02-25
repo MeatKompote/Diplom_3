@@ -1,28 +1,22 @@
+import actions.Actions;
 import io.qameta.allure.junit4.DisplayName;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import pageObject.BurgerConstructorPage;
-import pageObject.SignInPage;
-import pageObject.SignUpPage;
-import pageObject.UserAccountPage;
+import pages.*;
 
 import static org.junit.Assert.assertEquals;
 
 public class SignUpTest {
 
     private WebDriver driver;
+    Actions actions = new Actions();
 
-    String userName = generateRandomName();
-    String email = generateRandomName() + "@test.ru";
+    String userName = actions.generateRandomName();
+    String email = actions.generateRandomName() + "@test.ru";
     String password = "123456";
-
-    public String generateRandomName() {
-        return RandomStringUtils.randomAlphanumeric(10);
-    }
 
     @Before
     public void initialize() {
@@ -34,7 +28,7 @@ public class SignUpTest {
 
     @Test
     @DisplayName("Проверка успешной регистрации")
-    public void registartionWithCorrectCredentianls() {
+    public void registrationWithCorrectCredentials() {
 
         SignUpPage signUpPageObject = new SignUpPage(driver);
         SignInPage signInPageObject = new SignInPage(driver);
@@ -57,7 +51,7 @@ public class SignUpTest {
 
     @Test
     @DisplayName("Проверка регистрации с паролем меньше 6 символов")
-    public void registartionWithincorrectPasswrod() {
+    public void registrationWithIncorrectPassword() {
         String incorrectPassword = "12345";
 
         SignUpPage signUpPageObject = new SignUpPage(driver);

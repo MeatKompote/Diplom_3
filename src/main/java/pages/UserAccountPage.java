@@ -1,9 +1,11 @@
-package pageObject;
+package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class UserAccountPage extends AbstractPage {
+
     public UserAccountPage(WebDriver driver) {
         super(driver);
     }
@@ -20,28 +22,32 @@ public class UserAccountPage extends AbstractPage {
     // кнопка "Выход"
     private By signOutButtonLocator = By.xpath(".//button[text()='Выход']");
 
-    // поле Имя
+    // поле "Имя"
     private By userNameTextField = By.xpath(".//label[text()='Имя']/parent :: div/input");
 
 
-
     // геттеры для локаторов
+    @Step("Получение локатора: заголовок \"Профиль\"")
     public By getAccountLabelLocator() {
         return accountLabelLocator;
     }
 
+    @Step("Получение локатора: кнопка \"Конструктор\"")
     public By getConstructorButtonLocator() {
         return constructorButtonLocator;
     }
 
+    @Step("Получение локатора: логотип \"Stellar Burgers\"")
     public By getStellarBurgersLogoLocator() {
         return stellarBurgersLogoLocator;
     }
 
+    @Step("Получение локатора: кнопка \"Выход\"")
     public By getSignOutButtonLocator() {
         return signOutButtonLocator;
     }
 
+    @Step("Получение локатора: поле \"Имя\"")
     public By getUserNameTextField() {
         return userNameTextField;
     }

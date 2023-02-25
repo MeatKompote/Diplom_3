@@ -1,9 +1,10 @@
-package pageObject;
+package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class BurgerConstructorPage extends AbstractPage{
+public class BurgerConstructorPage extends AbstractPage {
 
     public BurgerConstructorPage(WebDriver driver) {
         super(driver);
@@ -37,38 +38,47 @@ public class BurgerConstructorPage extends AbstractPage{
     private By nachinkiLabelLocator = By.xpath(".//h2[text()='Начинки']");
 
     // геттеры для локаторов
+    @Step("Получение локатора: заголовок \"Соберите бургер\"")
     public By getCreateBurgerLabelLocator() {
         return createBurgerLabelLocator;
     }
 
+    @Step("Получение локатора: кнопка \"Личный Кабинет\"")
     public By getPersonalCabinetButtonLocator() {
         return personalCabinetButtonLocator;
     }
 
+    @Step("Получение локатора: кнопка \"Войти в аккаунт\"")
     public By getEnterAccountButtonLocator() {
         return enterAccountButtonLocator;
     }
 
+    @Step("Получение локатора: кнопка \"Булки\"")
     public By getBulkiButtonLocator() {
         return bulkiButtonLocator;
     }
 
+    @Step("Получение локатора: кнопка \"Соусы\"")
     public By getSousesButtonLocator() {
         return sousesButtonLocator;
     }
 
+    @Step("Получение локатора: кнопка \"Начинки\"")
     public By getNachinkiButtonLocator() {
         return nachinkiButtonLocator;
     }
 
+    @Step("Получение локатора: заголовок \"Булки\"")
     public By getBulkiLabelLocator() {
         return bulkiLabelLocator;
     }
 
+    @Step("Получение локатора: заголовок \"Соусы\"")
     public By getSousesLabelLocator() {
         return sousesLabelLocator;
     }
 
+    @Step("Получение локатора: заголовок \"Начинки\"")
     public By getNachinkiLabelLocator() {
         return nachinkiLabelLocator;
     }

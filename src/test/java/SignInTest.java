@@ -1,9 +1,9 @@
+import actions.Actions;
 import io.qameta.allure.junit4.DisplayName;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import pageObject.*;
+import pages.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,52 +20,19 @@ public class SignInTest {
     SignInPage signInPageObject;
     UserAccountPage userAccountPageObject;
     RestorePasswordPage restorePasswordPageObject;
-
-    public static String generateRandomName() {
-        return RandomStringUtils.randomAlphanumeric(10);
-    }
-
-    public void assertCorrectLogin() {
-
-        // ожидание загрузки главной страницы
-        burgerConstructorPageObject.waitTillElementIsVisible(burgerConstructorPageObject.getCreateBurgerLabelLocator());
-
-        // клик по конпке "Личный кабинет"
-        burgerConstructorPageObject.clickToTheElement(burgerConstructorPageObject.getPersonalCabinetButtonLocator());
-
-        // ожидание загрузки страницы
-        userAccountPageObject.waitTillElementIsVisible(userAccountPageObject.getAccountLabelLocator());
-
-        // проверка правильного имени пользователя в профиле
-        assertEquals("Имя пользователя не соответствует ожидаемому", userName,
-                userAccountPageObject.getElementAttribute(userAccountPageObject.getUserNameTextField(), "value"));
-    }
-
-    public void signOut() {
-
-        // ожидание загрузки страницы
-        userAccountPageObject.waitTillElementIsVisible(userAccountPageObject.getAccountLabelLocator());
-
-        // клик по кнопке "Выход"
-        userAccountPageObject.clickToTheElement(userAccountPageObject.getSignOutButtonLocator());
-        signInPageObject.waitTillElementIsVisible(signInPageObject.getSignInLabelLocator());
-    }
-
+    Actions actions = new Actions();
 
     @Before
     public void createRandomUser() {
         driver = new ChromeDriver();
-        userName = generateRandomName();
-        email = generateRandomName() + "@test.ru";
+        userName = actions.generateRandomName();
+        email = actions.generateRandomName() + "@test.ru";
         driver.get("https://stellarburgers.nomoreparties.site/register");
 
         signUpPageObject = new SignUpPage(driver);
 
         // создаем случайного тест юзера
-        signUpPageObject.insertTextIntoField(signUpPageObject.getNameTextFieldLocator(), userName);
-        signUpPageObject.insertTextIntoField(signUpPageObject.getEmailTextFieldLocator(), email);
-        signUpPageObject.insertTextIntoField(signUpPageObject.getPasswordTextFieldLocator(), password);
-        signUpPageObject.clickToTheElement(signUpPageObject.getRegistrationButtonLocator());
+        actions.generateRandomUser(driver, userName, email, password);
     }
 
     @Test
@@ -87,11 +54,8 @@ public class SignInTest {
         signInPageObject.logIn(email, password);
 
         // проверка на удачный логин
-        assertCorrectLogin();
-
-        // выход из аккаунта
-        signOut();
-
+        assertEquals("Имя пользователя не соответствует ожидаемому", userName,
+                actions.getUserNameAfterLogin(driver));
     }
 
     @Test
@@ -112,10 +76,8 @@ public class SignInTest {
         signInPageObject.logIn(email, password);
 
         // проверка на удачный логин
-        assertCorrectLogin();
-
-        // выход из аккаунта
-        signOut();
+        assertEquals("Имя пользователя не соответствует ожидаемому", userName,
+                actions.getUserNameAfterLogin(driver));
     }
 
     @Test
@@ -140,11 +102,8 @@ public class SignInTest {
         signInPageObject.logIn(email, password);
 
         // проверка на удачный логин
-        assertCorrectLogin();
-
-        // выход из аккаунта
-        signOut();
-
+        assertEquals("Имя пользователя не соответствует ожидаемому", userName,
+                actions.getUserNameAfterLogin(driver));
     }
 
     @Test
@@ -169,74 +128,14 @@ public class SignInTest {
         signInPageObject.logIn(email, password);
 
         // проверка на удачный логин
-        assertCorrectLogin();
-
-        // выход из аккаунта
-        signOut();
-    }
-
-    @Test
-    @DisplayName("проверка перехода на страницу конструктора при нажатии на логотип в личном кабинете")
-    public void transferFromUserAccountPageToBurgerConstructor() {
-        driver.get("https://stellarburgers.nomoreparties.site/login");
-
-        burgerConstructorPageObject = new BurgerConstructorPage(driver);
-        signInPageObject = new SignInPage(driver);
-        userAccountPageObject = new UserAccountPage(driver);
-
-        signInPageObject.logIn(email, password);
-
-        // ожидание загрузки главной страницы
-        burgerConstructorPageObject.waitTillElementIsVisible(burgerConstructorPageObject.getCreateBurgerLabelLocator());
-
-        // клик по конпке "Личный кабинет"
-        burgerConstructorPageObject.clickToTheElement(burgerConstructorPageObject.getPersonalCabinetButtonLocator());
-
-        // ожидание загрузки страницы
-        userAccountPageObject.waitTillElementIsVisible(userAccountPageObject.getAccountLabelLocator());
-
-        // нажатие на логотип Stellar Burgers
-        userAccountPageObject.clickToTheElement(userAccountPageObject.getStellarBurgersLogoLocator());
-
-        // ожидание загрузки страницы
-        burgerConstructorPageObject.waitTillElementIsVisible(burgerConstructorPageObject.getCreateBurgerLabelLocator());
-
-        // проверка
-        assertEquals("Не удалось перейти на страницу конструктора", true, burgerConstructorPageObject.isElementDisplayed(burgerConstructorPageObject.getCreateBurgerLabelLocator()));
-
-        // переход в личный кабинет для логаута
-        burgerConstructorPageObject.clickToTheElement(burgerConstructorPageObject.getPersonalCabinetButtonLocator());
-
-        // выход из аккаунта
-        signOut();
-
-    }
-
-    @Test
-    @DisplayName("проверка корректного логаута из личного кабинета")
-    public void correctSignOut() {
-        driver.get("https://stellarburgers.nomoreparties.site/login");
-
-        burgerConstructorPageObject = new BurgerConstructorPage(driver);
-        signInPageObject = new SignInPage(driver);
-        userAccountPageObject = new UserAccountPage(driver);
-
-        signInPageObject.logIn(email, password);
-
-        // ожидание загрузки главной страницы
-        burgerConstructorPageObject.waitTillElementIsVisible(burgerConstructorPageObject.getCreateBurgerLabelLocator());
-
-        // клик по конпке "Личный кабинет"
-        burgerConstructorPageObject.clickToTheElement(burgerConstructorPageObject.getPersonalCabinetButtonLocator());
-
-        // выход из аккаунта
-        signOut();
-
-        assertEquals("Не удалось разлогиниться", true, signInPageObject.isElementDisplayed(signInPageObject.getSignInLabelLocator()));
+        assertEquals("Имя пользователя не соответствует ожидаемому", userName,
+                actions.getUserNameAfterLogin(driver));
     }
 
     @After
     public void teardown() {
+        actions.signOut(driver);
         driver.quit();
     }
 }
+
